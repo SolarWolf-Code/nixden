@@ -12,15 +12,18 @@
       # this makes it so it uses the same nixpkgs version as us
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # get nh as an input (it isnt in nixpkgs)
+    # also note it will build from source since it isnt in nixpkgs
+    nh.url = "github:ViperML/nh";
   };
 
-  outputs = {self, flake-parts, nixpkgs, home-manager, ...} @ inputs:
+  outputs = {self, flake-parts, nixpkgs, home-manager, nh, ...} @ inputs:
     # call main flake parts function
     flake-parts.lib.mkFlake {inherit inputs;} {
       # the systems you want to output
       systems = ["x86_64-linux"];
       # outputs for each system
-      perSystem = {pkgs, ...}: {
+      perSystem = {pkgs, system, ...}: {
         # dev shell that is loaded when doing `nix develop`
         # this is useful for having some probgrams to manage your system
         # like having `just` to run command recipies
@@ -28,8 +31,9 @@
           name = "nixden";
           # list packages that should be in the devshell here
           packages = with pkgs; [
-            hello
             just
+            # nh's default package is itself
+            nh.packages.${system}.default
           ];
         };
       };
