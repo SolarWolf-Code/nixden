@@ -22,7 +22,6 @@
     networkmanager.enable = true;
   };
 
-  # edit as per your location and timezone
   time.timeZone = "America/Denver";
   i18n = {
     defaultLocale = "en_IN";
@@ -90,7 +89,6 @@
     };
   };
 
-  # Edit the username below (replace 'neeraj')
   users.users.wolf = {
     isNormalUser = true;
     description = "wolf";
@@ -100,6 +98,7 @@
       firefox
       discord
       vscode
+      flameshot
     ];
   };
 
@@ -121,6 +120,7 @@
     unzip
     micro
     direnv
+    lshw
   ];
 
   # tell nh where our flake is at

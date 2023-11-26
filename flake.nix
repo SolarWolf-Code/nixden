@@ -64,7 +64,7 @@
             # the nixpkgs package set to use
             pkgs = nixpkgs.legacyPackages.x86_64-linux;
             # this is the same as specialArgs from nixos configurations
-            extraSpectialArgs = {
+            extraSpecialArgs = {
               inherit inputs;
             };
             # this is the same as nixos modules
