@@ -91,6 +91,7 @@
     description = "wolf";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
+      librewolf
       firefox
       discord
       vscode
