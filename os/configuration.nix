@@ -3,7 +3,7 @@
 {
 
   imports = [
-    /etc/nixos/hardware-configuration.nix
+    ./hardware-configuration.nix
   ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -63,6 +63,10 @@
       displayManager = {
         lightdm.enable = true;
         defaultSession = "xfce+i3";
+        autoLogin = {
+          enable = true;
+          user = "wolf";
+        };
       };
     };
     gvfs.enable = true;
@@ -115,6 +119,7 @@
     unrar
     unzip
     micro
+    direnv
   ];
 
   programs = {

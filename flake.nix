@@ -23,6 +23,7 @@
           # list packages that should be in the devshell here
           packages = with pkgs; [
             hello
+            just
           ];
         };
       };
