@@ -6,15 +6,24 @@
     # flake parts is a helper library that makes flakes less verbose
     # and easier to organize
     flake-parts.url = "github:hercules-ci/flake-parts/";
+    # home manager
+    home-manager = {
+      url = "github:nix-community/home-manager/release-23.05";
+      # this makes it so it uses the same nixpkgs version as us
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # get nh as an input (it isnt in nixpkgs)
+    # also note it will build from source since it isnt in nixpkgs
+    nh.url = "github:ViperML/nh";
   };
 
-  outputs = {self, flake-parts, nixpkgs, ...} @ inputs:
+  outputs = {self, flake-parts, nixpkgs, home-manager, nh, ...} @ inputs:
     # call main flake parts function
     flake-parts.lib.mkFlake {inherit inputs;} {
       # the systems you want to output
       systems = ["x86_64-linux"];
       # outputs for each system
-      perSystem = {pkgs, ...}: {
+      perSystem = {pkgs, system, ...}: {
         # dev shell that is loaded when doing `nix develop`
         # this is useful for having some probgrams to manage your system
         # like having `just` to run command recipies
@@ -22,8 +31,9 @@
           name = "nixden";
           # list packages that should be in the devshell here
           packages = with pkgs; [
-            hello
             just
+            # nh's default package is itself
+            nh.packages.${system}.default
           ];
         };
       };
@@ -43,6 +53,23 @@
             # you don't need to load it again here
             modules = [
               ./os/configuration.nix
+            ];
+          };
+        };
+
+        # like nixosConfigurations but for home manager
+        homeConfigurations = {
+          # like nixpkgs.lib.nixosSystem but home manager
+          "wolf@wolftop" = home-manager.lib.homeManagerConfiguration {
+            # the nixpkgs package set to use
+            pkgs = nixpkgs.legacyPackages.x86_64-linux;
+            # this is the same as specialArgs from nixos configurations
+            extraSpectialArgs = {
+              inherit inputs;
+            };
+            # this is the same as nixos modules
+            modules = [
+              ./home/wolf.nix
             ];
           };
         };

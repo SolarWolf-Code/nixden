@@ -7,6 +7,7 @@
   ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
+
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/nvme0n1";
   boot.loader.grub.useOSProber = true;
@@ -121,6 +122,11 @@
     micro
     direnv
   ];
+
+  # tell nh where our flake is at
+  environment.sessionVariables = {
+    FLAKE = "/home/wolf/nixden";
+  };
 
   programs = {
     thunar.enable = true;
